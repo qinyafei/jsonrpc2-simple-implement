@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>test jsonrpc2 demo</title>
+
+    <style>
+        .mainContainer {
+            display: block;
+            width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .urlInput {
+            display: block;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .centeredVideo {
+            display: block;
+            width: 100%;
+            height: 576px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+        }
+
+        .controls {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 8px;
+            margin-bottom: 10px;
+        }
+
+        .logcatBox {
+            border-color: #CCCCCC;
+            font-size: 11px;
+            font-family: Menlo, Consolas, monospace;
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mainContainer">
+        <input name="urlinput" class="urlInput" type="text" value="/static/media/demo.json" />
+        <div class="controls">
+            <button onclick="test_realcap()">real</button>
+        </div>
+        <textarea name="logcatbox" class="logcatBox" rows="10" readonly></textarea>
+    </div>
+
+    <script src="/jsonrpc.js"></script>
+
+    <script charset="UTF-8">
+        var methodlist = [
+            "Rs.Repair.Submit",
+        ];
+        index = 3;
+        function test_realcap() {
+            var rpc = JsonRpc2.CreatRpc();
+            var params = "{\"operate_type\":1, \"pic_type\":1, \"dev_channel\":[18]}";
+            var req = new Request(methodlist[index], params, 1);
+
+            var url = "http://192.168.14.40:9889/testjsonrpc/2";
+            var res = rpc.rpcall(url, req);
+            res.then(function (response) {
+                if (response.result != undefined) {
+                    var result = response.result;
+                    alert(result)
+                } else {
+                    var error = response.error;
+                    alert(error)
+                }
+                var id = response.id;
+
+            }, function (errRes) {
+                var er = errRes.error;
+                var id = errRes.id;
+            })
+
+            //index = index + 1;
+        }
+        //document.addEventListener('DOMContentLoaded', function () {
+        //    test_jsonrpc();
+        //});
+    </script>
+
+</body>
+
+</html>
